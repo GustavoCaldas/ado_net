@@ -18,3 +18,7 @@ SELECT * FROM funcionario;
 
 DROP DATABASE ado_net;
 CREATE DATABASE ado_net;
+
+DELETE FROM funcionario WHERE id = 5;
+
+UPDATE funcionario SET name = 'ronaldo', age = 29, cpf = '98312' WHERE id = 4;

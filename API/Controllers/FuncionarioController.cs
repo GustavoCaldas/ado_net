@@ -37,5 +37,22 @@ namespace API.Controllers
             await this.rep.AddFuncionario(funcionario);
             return Ok("Funcionario has been created");
         }
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> DeleteFuncionario(int id)
+        {
+            await this.rep.RemoveFuncionario(id);
+            return Ok("Funcionario has been deleted");
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> UpdateFuncionario(int id, [FromBody] Funcionario funcionario)
+        {
+            funcionario.Id = id;
+            await this.rep.UpdateFuncionario(funcionario);
+            return Ok("Funcionario has been updated");
+        }
     }
 }

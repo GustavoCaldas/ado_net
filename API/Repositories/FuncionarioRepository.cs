@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using API.Interfaces;
@@ -41,11 +42,11 @@ namespace API.Repositories
             while( await reader.ReadAsync() )
             {
                 lstFuncionario.Add(
-                    new Funcionario( (int)reader["id"], 
-                                        (string)reader["name"], 
-                                        (int)reader["age"], 
-                                        (string)reader["cpf"])
-                );
+                    new Funcionario( (int) reader["id"], 
+                                        (string) reader["name"], 
+                                        (int) reader["age"], 
+                                        (string) reader["cpf"])
+                );                
             }
 
             await connectionDB.CloseAsync();
@@ -74,14 +75,25 @@ namespace API.Repositories
             return funcionario;
         }
 
-        public Task RemoveFuncionario(int? id)
+        public async Task RemoveFuncionario(int id)
         {
-            throw new System.NotImplementedException();
+            MySqlCommand command = new MySqlCommand($"DELETE FROM funcionario WHERE id = {id}", connectionDB);
+            command.CommandType = CommandType.Text;
+            
+            await connectionDB.OpenAsync();
+            await command.ExecuteNonQueryAsync();
+            await connectionDB.CloseAsync();
         }
 
-        public Task UpdateFuncionario(Funcionario funcionario)
+        public async Task UpdateFuncionario(Funcionario funcionario)
         {
-            throw new System.NotImplementedException();
+            MySqlCommand command = new MySqlCommand($"UPDATE funcionario SET name='{funcionario.Name}'," +
+                $"age={funcionario.Age}, cpf='{funcionario.Cpf}' WHERE id={funcionario.Id}", connectionDB);
+            command.CommandType = CommandType.Text;
+
+            await connectionDB.OpenAsync();
+            await command.ExecuteNonQueryAsync();
+            await connectionDB.CloseAsync();
         }
     }
 }
